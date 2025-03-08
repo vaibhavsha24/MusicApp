@@ -26,7 +26,7 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
    - **LiveData & StateFlow** are used for managing state updates reactively.  
    
 ### 2️⃣ **Data Layer (Repository & API Handling)**  
-   - **Repository Pattern** is used to handle data from multiple sources (API & Local Storage).  
+   - **Repository Pattern** is used to handle data from API.  
    - **Retrofit** is used for handling API calls with proper error handling.  
    - **Hilt Dependency Injection** ensures modular, testable, and reusable components.  
    
