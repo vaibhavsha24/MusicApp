@@ -7,7 +7,6 @@ import retrofit2.Response
 
 open class ApiHandler {
 
-    private val gson = Gson()
 
     // Function to make a network request using the provided service and method.
     suspend fun <T : Any> apiRequest(dataRequest: suspend () -> Response<T>): DataState<T> {
