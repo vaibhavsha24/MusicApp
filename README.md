@@ -20,21 +20,29 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
 
 ## 📚 Project Structure  
 
-### 1️⃣ **Presentation Layer (UI & ViewModel)**  
+### 1 **Presentation Layer (UI & ViewModel)**  
    - Built using **Jetpack Compose** for UI, ensuring a modern and declarative design.  
-   - **ViewModel (Jetpack)** is used to store UI state and handle business logic.  
-   - **LiveData & StateFlow** are used for managing state updates reactively.  
-   
-### 2️⃣ **Data Layer (Repository & API Handling)**  
-   - **Repository Pattern** is used to handle data from API.  
-   - **Retrofit** is used for handling API calls with proper error handling.  
-   - **Hilt Dependency Injection** ensures modular, testable, and reusable components.  
-   
-### 3️⃣ **Service Layer (Foreground Service & PiP Mode)**  
-   - **Foreground Service** keeps the music player running in the background.  
+   - **ViewModel (Jetpack)** is used to store UI state and handle business logic. Used HiltViewmodel to use DI for the Repository instance
+   - **LiveData & StateFlow** are used for managing state updates reactively.
+   - UI handled for the **PIP Mode* and actions added.
+   - Enabled the change of songs based on Scrolling of Songs.
    - **ExoPlayer** is used to play, pause, and manage song playback efficiently.  
+     
+### 2 **Data Layer (Repository & Data Handling)**  
+   - **Repository Pattern** is used to handle data from API.  
+   - **Hilt Dependency Injection** ensures modular, testable, and reusable components.  
+
+### 3 **Service Layer (Foreground Service & PiP Mode)**  
+   - **Foreground Service** keeps the music player running in the background.  
    - **Picture-in-Picture (PiP) Mode** allows users to control music when the app is minimized.  
    - **BroadcastReceiver** is used to handle media actions like play, pause, and skip.  
+
+### 4 **Network Layer (API Handling)**  
+   - **Retrofit** is used for handling API calls with proper error handling.
+   - **Single Point** in the app to make api calls to make it extendable and reusable.
+   - **DataState Wrapper** used on basis of Response i.e DataState.Success, DataState.Error and DataState.Loading
+   - Used **Dispatcher** to call API on BG Thread 
+
 
 ---
 
