@@ -25,6 +25,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
+// used DI to Provide Repo Instance
 class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongRepository) :
     ViewModel() {
 
@@ -43,6 +44,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
     private val _isPlaying = MutableStateFlow(true)
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
+    // Fetch Songs from API.
     fun fetchSongs(context:Context) {
             viewModelScope.launch {
                 songsRepo.searchSongs("HINDI TOP", 100).onEach { it ->
@@ -53,11 +55,13 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
                                 _songs.value = songs
                                 _currentSong.value = songs?.getOrNull(0)
                             }
+                            // Save the Response to Local Storage
                             SharedPrefHelper.saveSongs(context,songsResponse)
                             _songsResponse.postValue(it)
                         }
 
                         is DataState.Error -> {
+                            // In case the API fails use the already stored Response from Local Storage
                              val localSongs = SharedPrefHelper.getSongs(context)
                             if (localSongs!=null) {
                                 localSongs?.data?.results?.let { songs ->
@@ -66,6 +70,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
                                 }
                                 _songsResponse.postValue(DataState.Success(localSongs))
                             } else {
+                                // else post error.
                                 _songsResponse.postValue(it)
                             }
                         } else ->{}
@@ -74,20 +79,24 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
             }
     }
 
+    // Change value on the basis of Play pause clicked
     fun togglePlayPause() {
         _isPlaying.value = !_isPlaying.value
     }
 
+    // shuffle the songs array
     fun shuffleSongs() {
         _songs.value = _songs.value.shuffled()
         _currentSong.value = _songs.value[_currentSongIndex.value]
 
     }
 
+    // used to play initially music
     fun playMusic(context: Context) {
         _isPlaying.value = true
     }
 
+    // Next Click handled and current song and index updated
     fun nextClicked() {
         val currentIndex = _songs.value.indexOf(_currentSong.value)
         if (currentIndex < _songs.value.size - 1) {
@@ -96,6 +105,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
         }
     }
 
+    // Previous Click Handled and current song and index updated
     fun previousClicked() {
         val currentIndex = _songs.value.indexOf(_currentSong.value)
         if (currentIndex > 0) {
@@ -104,11 +114,13 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
         }
     }
 
+    // use of scroll listener to select the song
     fun selectSong(index: Int) {
         _currentSongIndex.value = index
         _currentSong.value = _songs.value[index]
     }
 
+    // PIP actions handled
     @OptIn(UnstableApi::class)
     fun handlePiPAction(action: String) {
         when (action) {
@@ -124,6 +136,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
         }
     }
 
+    // In case of error fetch local songs response saved for testing purpose
     fun fetchLocal(context: Context){
         try {
             // Open the local JSON file from assets
@@ -131,7 +144,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
             val reader = InputStreamReader(inputStream)
 
 
-            // Use Gson to parse the JSON data into the MyResponse object
+            // Use Gson to parse the JSON data into the object
             val gson = Gson()
             var response = gson.fromJson<Any>(reader, SongResponse::class.java) as SongResponse
 
@@ -143,7 +156,7 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
             _songsResponse.postValue(DataState.Success(response))
 
         } catch (e: Exception) {
-
+            _songsResponse.postValue(DataState.Error("Something Went Wrong"))
         }
     }
 }

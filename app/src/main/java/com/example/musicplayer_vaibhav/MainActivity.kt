@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(UnstableApi::class)
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-
+        enterPipMode()
     }
 
     @UnstableApi
