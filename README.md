@@ -10,7 +10,6 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
 - **Jetpack Compose** for a fully declarative UI.  
 - **ExoPlayer** for smooth audio playback.  
 - **Hilt Dependency Injection** for efficient dependency management.  
-- **Foreground Service** for background music playback.  
 - **Picture-in-Picture (PiP) Mode** with media controls.  
 - **Local Caching (SharedPreferences)** to store last fetched songs in Case of Network failure Songs are loaded from Cache.  
 - **Network Handling** with Retrofit for API calls.  
@@ -32,8 +31,7 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
    - **Repository Pattern** is used to handle data from API.  
    - **Hilt Dependency Injection** ensures modular, testable, and reusable components.  
 
-### 3 **Service Layer (Foreground Service & PiP Mode)**  
-   - **Foreground Service** keeps the music player running in the background.  
+### 3 **Service Layer (BroadcastReceiver)**  
    - **Picture-in-Picture (PiP) Mode** allows users to control music when the app is minimized.  
    - **BroadcastReceiver** is used to handle media actions like play, pause, and skip.  
 
@@ -51,13 +49,13 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
 |------------|---------|
 | **Jetpack Compose** | UI Development |
 | **MVVM** | Architecture Pattern |
+| **Picture-in-Picture Mode** | Mini Player |
 | **ExoPlayer** | Audio Playback |
 | **Hilt DI** | Dependency Injection |
 | **Retrofit** | API Handling |
 | **StateFlow & LiveData** | State Management |
-| **Foreground Service** | Background Music Playback |
+| **BroadcastReceiver** | PIP Navigation |
 | **SharedPreferences** | Offline Caching |
-| **Picture-in-Picture Mode** | Mini Player |
 
 ---
 
