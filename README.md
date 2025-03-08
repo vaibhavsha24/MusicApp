@@ -1,5 +1,5 @@
 # Music Player App 🎵
-
+Download AP -  ```sh https://github.com/vaibhavsha24/MusicApp/blob/master/musicPlayer.apk  ```
 ## Overview  
 This is a **Android Music Player app** built using **Jetpack Compose** and follows the **MVVM (Model-View-ViewModel) architecture**. It supports **background music playback**, a **mini-player (PiP mode)**, and **offline caching** for seamless user experience.  
 
