@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class NetworkClient @Inject constructor(private val okHttpClient: OkHttpClient) {
 
+    // TO get the Retrofit instance using the DI.
     fun getRetrofitInstance(baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)

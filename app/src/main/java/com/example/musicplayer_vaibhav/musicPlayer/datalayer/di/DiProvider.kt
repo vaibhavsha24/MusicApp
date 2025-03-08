@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+// Dependency injection class to Provide the instances.
+// USed Dagger Hilt for Dependency Injection
 @InstallIn(SingletonComponent::class)
 @Module
 class DiProvider {
@@ -32,6 +34,7 @@ class DiProvider {
         return NetworkClient(okHttpClient)
     }
 
+    // API Service Provider with Base url from Network Provider class
     @Provides
     @Singleton
     fun provideApiService(
@@ -42,12 +45,14 @@ class DiProvider {
             .create(SongsApiService::class.java)
     }
 
+    // API handler Provider.
     @Provides
     @Singleton
     fun provideApiHandler(): ApiHandler {
         return ApiHandler()
     }
 
+    // Songs Repo provider to make api calls
     @Provides
     @Singleton
     fun provideSongsRepo(apiService: SongsApiService,apiHandler: ApiHandler): SongRepository {

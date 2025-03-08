@@ -1,12 +1,10 @@
 package com.example.musicplayer_vaibhav
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -21,54 +19,48 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerNotificationManager
 import com.example.musicplayer_vaibhav.musicPlayer.MusicPlayerScreen
 import com.example.musicplayer_vaibhav.musicPlayer.PiPActionReceiver
 import com.example.musicplayer_vaibhav.musicPlayer.viewmodel.MusicPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private var isInPiPMode by mutableStateOf(false) // Track PiP state
+    private var isInPiPMode by mutableStateOf(false) // Track PiP state to handle the Ui for PIP Mode
     private lateinit var pipReceiver: PiPActionReceiver
+    // initializing view model here to use same instance for UI and PIP Service
     private val viewModel: MusicPlayerViewModel by viewModels()
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // using compose for the UI and passing viewmodel instance
         setContent {
             MusicPlayerScreen(isInPiPMode,viewModel)
         }
-        pipReceiver = PiPActionReceiver(viewModel) // Pass ViewModel
+        pipReceiver = PiPActionReceiver(viewModel)
 
         val filter = IntentFilter().apply {
             addAction(PlayerNotificationManager.ACTION_PLAY)
             addAction(PlayerNotificationManager.ACTION_PREVIOUS)
             addAction(PlayerNotificationManager.ACTION_NEXT)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(
-                pipReceiver,filter, RECEIVER_EXPORTED
-            )
-        }
-    }
+        registerReceiver(
+            pipReceiver, filter, RECEIVER_EXPORTED
+        )
 
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            enterPipMode()
-        }
     }
 
     @OptIn(UnstableApi::class)
-    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+
+    }
+
+    @UnstableApi
     private fun enterPipMode() {
         val previousIntent = PendingIntent.getBroadcast(
             this, 0, Intent(PlayerNotificationManager.ACTION_PREVIOUS), PendingIntent.FLAG_IMMUTABLE
@@ -80,6 +72,7 @@ class MainActivity : ComponentActivity() {
             this, 0, Intent(PlayerNotificationManager.ACTION_NEXT), PendingIntent.FLAG_IMMUTABLE
         )
 
+        // adding actions to listen intent from PIP Mode.
         val actions = listOf(
             RemoteAction(
                 Icon.createWithResource(this, R.drawable.previous),
@@ -116,11 +109,12 @@ class MainActivity : ComponentActivity() {
     )  {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
+        // updating pipMode state here
         isInPiPMode = isInPictureInPictureMode
     }
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(pipReceiver)
+        unregisterReceiver(pipReceiver) //unregister to avoid any memory leaks
     }
 }
 

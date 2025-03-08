@@ -11,6 +11,7 @@ import javax.inject.Singleton
 @Module
 class NetworkProvider {
 
+    // Provides the Base Url to the API Service
     @Singleton
     @Provides
     @Named("baseUrl")
@@ -18,8 +19,4 @@ class NetworkProvider {
        return  "https://saavn.dev/"
     }
 
-//fetched songs from this api but https://saavn.dev/ api is giving
-// 500 internal server
-// error mostly so developement and testing is almost impossible using this, so took the response from this api
-// ad added a mock api using run.mocky.io and saved response there
 }

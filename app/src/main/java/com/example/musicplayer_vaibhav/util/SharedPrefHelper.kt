@@ -2,7 +2,6 @@ package com.example.musicplayer_vaibhav.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.musicplayer_vaibhav.musicPlayer.datalayer.models.Song
 import com.example.musicplayer_vaibhav.musicPlayer.datalayer.models.SongResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
