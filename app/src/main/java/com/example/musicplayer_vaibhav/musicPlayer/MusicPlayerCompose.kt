@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -96,12 +97,13 @@ fun MusicPlayerScreen(isInPiPMode: Boolean, viewModel: MusicPlayerViewModel) {
             if (!isInPiPMode) {
                 MusicPlayerSuccessState(
                     Modifier
-                        .fillMaxSize()
                         .background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(Color(0xFFFF5E62), Color.Black)
                             )
-                        ),
+                        )
+                        .navigationBarsPadding()
+                        .fillMaxSize(),
                     songs, isPlaying, currentSongIndex,
                     exoPlayer,
                     onPlayPauseClicked = { viewModel.togglePlayPause() },
