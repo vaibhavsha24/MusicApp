@@ -41,8 +41,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MusicPlayerScreen(isInPiPMode,viewModel)
         }
-        pipReceiver = PiPActionReceiver(viewModel)
-
+        pipReceiver = PiPActionReceiver()
+        pipReceiver.setViewModel(viewModel)
         val filter = IntentFilter().apply {
             addAction(PlayerNotificationManager.ACTION_PLAY)
             addAction(PlayerNotificationManager.ACTION_PREVIOUS)
