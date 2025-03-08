@@ -23,7 +23,7 @@ This is a **Android Music Player app** built using **Jetpack Compose** and follo
    - Built using **Jetpack Compose** for UI, ensuring a modern and declarative design.  
    - **ViewModel (Jetpack)** is used to store UI state and handle business logic. Used HiltViewmodel to use DI for the Repository instance
    - **LiveData & StateFlow** are used for managing state updates reactively.
-   - UI handled for the **PIP Mode* and actions added.
+   - UI handled for the **PIP Mode** and actions added.
    - Enabled the change of songs based on Scrolling of Songs.
    - **ExoPlayer** is used to play, pause, and manage song playback efficiently.  
      
