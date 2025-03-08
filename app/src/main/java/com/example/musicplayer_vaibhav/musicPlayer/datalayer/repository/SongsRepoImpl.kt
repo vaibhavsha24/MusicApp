@@ -19,9 +19,7 @@ class SongRepositoryImpl(
 
     override fun searchSongs(query: String, limit: Int): Flow<DataState<SongResponse>> = flow {
         emit(DataState.Loading)
-        // not calling jiosavvan end point because it is giving 500 mostly using mocked api instead
-//        emit( apiHandler?.apiRequest { apiService.searchSongs(query, limit) })
-        emit( apiHandler?.apiRequest { apiService.searchSongsMockAPi() })
+        emit( apiHandler?.apiRequest { apiService.searchSongs(query, limit) })
 
     }.flowOn(Dispatchers.IO) as Flow<DataState<SongResponse>>
 

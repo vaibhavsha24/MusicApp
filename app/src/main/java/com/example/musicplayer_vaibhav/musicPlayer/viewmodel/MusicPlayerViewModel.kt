@@ -1,12 +1,13 @@
 package com.example.musicplayer_vaibhav.musicPlayer.viewmodel
 
 import android.content.Context
-import android.content.Intent
-import androidx.core.content.ContextCompat
+import androidx.annotation.OptIn
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.PlayerNotificationManager
 import com.example.musicplayer_vaibhav.musicPlayer.datalayer.models.Song
 import com.example.musicplayer_vaibhav.musicPlayer.datalayer.models.SongResponse
 import com.example.musicplayer_vaibhav.musicPlayer.datalayer.repository.SongRepository
@@ -14,14 +15,14 @@ import com.example.musicplayer_vaibhav.networklayer.DataState
 import com.example.musicplayer_vaibhav.util.SharedPrefHelper
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.io.InputStreamReader
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
+
 
 @HiltViewModel
 class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongRepository) :
@@ -106,6 +107,44 @@ class MusicPlayerViewModel @Inject constructor(private val songsRepo: SongReposi
     fun selectSong(index: Int) {
         _currentSongIndex.value = index
         _currentSong.value = _songs.value[index]
+    }
+
+    @OptIn(UnstableApi::class)
+    fun handlePiPAction(action: String) {
+        when (action) {
+            PlayerNotificationManager.ACTION_PLAY -> {
+                togglePlayPause()
+            }
+            PlayerNotificationManager.ACTION_PREVIOUS -> {
+                previousClicked()
+            }
+            PlayerNotificationManager.ACTION_NEXT -> {
+                nextClicked()
+            }
+        }
+    }
+
+    fun fetchLocal(context: Context){
+        try {
+            // Open the local JSON file from assets
+            val inputStream = context.assets.open("music_response.json")
+            val reader = InputStreamReader(inputStream)
+
+
+            // Use Gson to parse the JSON data into the MyResponse object
+            val gson = Gson()
+            var response = gson.fromJson<Any>(reader, SongResponse::class.java) as SongResponse
+
+            response?.data?.results?.let { songs ->
+                _songs.value = songs
+                _currentSong.value = songs?.getOrNull(0)
+            }
+            SharedPrefHelper.saveSongs(context,response)
+            _songsResponse.postValue(DataState.Success(response))
+
+        } catch (e: Exception) {
+
+        }
     }
 }
 

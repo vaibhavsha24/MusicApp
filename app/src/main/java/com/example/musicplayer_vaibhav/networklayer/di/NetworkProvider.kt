@@ -15,8 +15,7 @@ class NetworkProvider {
     @Provides
     @Named("baseUrl")
     fun provideBaseUrl(): String {
-//       return // "https://saavn.dev/"
-      return "https://run.mocky.io/"
+       return  "https://saavn.dev/"
     }
 
 //fetched songs from this api but https://saavn.dev/ api is giving

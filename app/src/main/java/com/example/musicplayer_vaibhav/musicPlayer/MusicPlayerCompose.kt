@@ -77,8 +77,7 @@ import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun MusicPlayerScreen(isInPiPMode: Boolean) {
-    var viewModel: MusicPlayerViewModel = hiltViewModel()
+fun MusicPlayerScreen(isInPiPMode: Boolean, viewModel: MusicPlayerViewModel) {
 
     val songs by viewModel.songs.collectAsState(initial = emptyList())
     val currentSong by viewModel.currentSong.collectAsState(initial = null)
@@ -136,7 +135,7 @@ fun MusicPlayerScreen(isInPiPMode: Boolean) {
                     changeSongScroll = {
                         if (!isPipModeToggled) {
                             viewModel.selectSong(it)
-                        }else{
+                        } else {
                             isPipModeToggled = false
                         }
 
@@ -155,8 +154,11 @@ fun MusicPlayerScreen(isInPiPMode: Boolean) {
 
         is DataState.Error -> {
             Column {
-                ErrorView((songsResponse as DataState.Error).errorMessage) {
+                ErrorView((songsResponse as DataState.Error).errorMessage, {
                     viewModel.fetchSongs(context)
+                }) {
+                    // enabled this in case the api fail this can be used for the testing purpose
+                    viewModel.fetchLocal(context)
                 }
             }
 
@@ -290,7 +292,7 @@ fun SongItem(modifier: Modifier, song: Song) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             model = song.image?.getOrNull(2)?.url,
         )
     }
@@ -421,23 +423,38 @@ fun Controls(
 }
 
 @Composable
-fun ErrorView(errorMessage: String?, onRetry: () -> Unit) {
-    Box(
+fun ErrorView(errorMessage: String?, onRetry: () -> Unit, fetchLocal: () -> Unit) {
+    Column(
         modifier = Modifier
             .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = errorMessage ?: "Something went wrong!",
             color = Color.Red
         )
         Button(
-            modifier = Modifier.wrapContentSize(),
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .wrapContentSize(),
             onClick = onRetry,
         ) {
             Text(
                 text = "Retry",
-                color = Color.Black
+                color = Color.White
+            )
+        }
+
+        Button(
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .wrapContentSize(),
+            onClick = fetchLocal,
+        ) {
+            Text(
+                text = "Fetch Local Json for testing",
+                color = Color.White
             )
         }
     }

@@ -91,6 +91,8 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.3.1") //
     implementation ("androidx.media3:media3-session:1.2.0")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
 
 }
