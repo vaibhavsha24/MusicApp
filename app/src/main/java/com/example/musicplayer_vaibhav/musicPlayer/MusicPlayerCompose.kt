@@ -89,8 +89,10 @@ fun MusicPlayerScreen(isInPiPMode: Boolean, viewModel: MusicPlayerViewModel) {
             exoPlayer?.pause()
         }
     }
+    // Change the UI on basis of Success, Error or Loading State
     when (songsResponse) {
         is DataState.Success -> {
+            // Handle isInPipMode UI changes automatically when toggled
             if (!isInPiPMode) {
                 MusicPlayerSuccessState(
                     Modifier
@@ -180,7 +182,8 @@ fun MusicPlayerSuccessState(
                 .weight(1f), songs = songs, currentSongIndex, changeSongScroll
         )
 
-        songs?.get(currentSongIndex)?.name?.let {
+        // song detail of current Playing song added
+        songs.getOrNull(currentSongIndex)?.name?.let {
             SongDetails(
                 it,
                 Modifier
@@ -191,7 +194,7 @@ fun MusicPlayerSuccessState(
             )
         }
         MusicSeekBar(player = exoPlayer, modifier = Modifier.fillMaxWidth())
-        // Controls
+        // Controls to handle the navigations and seek
         Controls(
             Modifier
                 .fillMaxWidth()
