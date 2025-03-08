@@ -1,8 +1,6 @@
 package com.example.musicplayer_vaibhav.networklayer
 
-import android.util.Log
-import org.json.JSONObject
-import com.google.gson.Gson
+
 import retrofit2.Response
 
 open class ApiHandler {
